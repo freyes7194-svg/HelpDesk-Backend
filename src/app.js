@@ -1,136 +1,94 @@
 const express = require("express");
 const cors = require("cors");
 
+require("dotenv").config();
+
+
+const conectarDB = require("./config/database");
+
+
 const ticketRoutes = require("./routes/ticketRoutes");
+
+
+// Crear aplicación Express
 
 const app = express();
 
-/*
-  Orígenes permitidos:
-  - Frontend local durante el desarrollo.
-  - Frontend público almacenado en FRONTEND_URL.
-*/
-const origenesPermitidos = [
-  "http://localhost:5173",
-  process.env.FRONTEND_URL
-].filter(Boolean);
+
+// Conectar MongoDB Atlas
+
+conectarDB();
+
+
+
+// ===============================
+// MIDDLEWARES
+// ===============================
+
+
+// Permitir conexión con React
 
 app.use(
-  cors({
-    origin: (origin, callback) => {
-      /*
-        Permite Postman, Chrome directo y los
-        frontend incluidos en la lista.
-      */
-      if (
-        !origin ||
-        origenesPermitidos.includes(origin)
-      ) {
-        return callback(null, true);
-      }
+    cors({
 
-      return callback(
-        new Error(
-          `Origen no autorizado por CORS: ${origin}`
-        )
-      );
-    },
+        origin:[
+            process.env.FRONTEND_URL,
+            "http://localhost:5173"
+        ],
 
-    methods: [
-      "GET",
-      "POST",
-      "PUT",
-      "PATCH",
-      "DELETE",
-      "OPTIONS"
-    ],
+        methods:[
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE"
+        ],
 
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization"
-    ]
-  })
+        credentials:true
+
+    })
 );
+
+
+
+// Permitir JSON
 
 app.use(
-  express.json({
-    limit: "1mb"
-  })
+    express.json()
 );
 
-app.use(
-  express.urlencoded({
-    extended: true
-  })
-);
 
-/*
-  Ruta principal.
-*/
-app.get("/", (req, res) => {
-  res.status(200).json({
-    exito: true,
-    mensaje:
-      "API pública del Sistema Help Desk funcionando correctamente",
 
-    endpoints: {
-      tickets: "/tickets",
-      resumen: "/tickets/resumen",
-      salud: "/health"
-    }
-  });
-});
 
-/*
-  Ruta para comprobar el estado del servidor.
-*/
-app.get("/health", (req, res) => {
-  res.status(200).json({
-    exito: true,
-    estado: "healthy"
-  });
-});
+// ===============================
+// RUTA DE PRUEBA
+// ===============================
 
-/*
-  Rutas CRUD.
-*/
-app.use("/tickets", ticketRoutes);
+app.get("/",(req,res)=>{
 
-/*
-  Ruta no encontrada.
-*/
-app.use((req, res) => {
-  res.status(404).json({
-    exito: false,
-    mensaje: "Ruta no encontrada",
-    metodo: req.method,
-    ruta: req.originalUrl
-  });
-});
 
-/*
-  Manejador general de errores.
-*/
-app.use((error, req, res, next) => {
-  console.error(error.message);
+    res.json({
 
-  if (
-    error.message.includes(
-      "Origen no autorizado"
-    )
-  ) {
-    return res.status(403).json({
-      exito: false,
-      mensaje: error.message
+        mensaje:
+        "API Help Desk funcionando correctamente"
+
     });
-  }
 
-  return res.status(500).json({
-    exito: false,
-    mensaje:
-      error.message ||
-      "Error interno del servidor"
-  });
+
 });
+
+
+
+
+// ===============================
+// RUTAS DEL SISTEMA
+// ===============================
+
+
+app.use(
+    "/tickets",
+    ticketRoutes
+);
+
+
 
 module.exports = app;

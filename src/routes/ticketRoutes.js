@@ -1,51 +1,75 @@
 const express = require("express");
 
-const {
-  obtenerTickets,
-  obtenerResumenTickets,
-  obtenerTicketPorId,
-  crearTicket,
-  actualizarTicket,
-  eliminarTicket
-} = require(
-  "../controllers/ticketController"
-);
-
 const router = express.Router();
 
-/*
-  La ruta /resumen debe estar antes de /:id.
-  De lo contrario Express podría interpretar
-  "resumen" como el ID de un ticket.
-*/
-router.get(
-  "/resumen",
-  obtenerResumenTickets
-);
+const ticketController = require("../controllers/ticketController");
+
+
+// ===============================
+// RESUMEN DASHBOARD
+// IMPORTANTE: DEBE IR ANTES DE /:id
+// ===============================
 
 router.get(
-  "/",
-  obtenerTickets
+    "/resumen",
+    ticketController.obtenerResumen
 );
 
+
+
+// ===============================
+// OBTENER TODOS
+// ===============================
+
 router.get(
-  "/:id",
-  obtenerTicketPorId
+    "/",
+    ticketController.obtenerTickets
 );
+
+
+
+// ===============================
+// CREAR
+// ===============================
 
 router.post(
-  "/",
-  crearTicket
+    "/",
+    ticketController.crearTicket
 );
+
+
+
+// ===============================
+// OBTENER POR ID
+// ===============================
+
+router.get(
+    "/:id",
+    ticketController.obtenerTicketPorId
+);
+
+
+
+// ===============================
+// ACTUALIZAR
+// ===============================
 
 router.put(
-  "/:id",
-  actualizarTicket
+    "/:id",
+    ticketController.actualizarTicket
 );
 
+
+
+// ===============================
+// ELIMINAR
+// ===============================
+
 router.delete(
-  "/:id",
-  eliminarTicket
+    "/:id",
+    ticketController.eliminarTicket
 );
+
+
 
 module.exports = router;

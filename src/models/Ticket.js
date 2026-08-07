@@ -1,102 +1,70 @@
 const mongoose = require("mongoose");
 
+
 const ticketSchema = new mongoose.Schema(
-  {
-    titulo: {
-      type: String,
-      required: [
-        true,
-        "El título del ticket es obligatorio"
-      ],
-      trim: true,
-      minlength: [
-        3,
-        "El título debe tener al menos 3 caracteres"
-      ],
-      maxlength: [
-        120,
-        "El título no puede superar los 120 caracteres"
-      ]
+{
+
+    titulo:{
+        type:String,
+        required:true
     },
 
-    descripcion: {
-      type: String,
-      required: [
-        true,
-        "La descripción del ticket es obligatoria"
-      ],
-      trim: true,
-      minlength: [
-        5,
-        "La descripción debe tener al menos 5 caracteres"
-      ],
-      maxlength: [
-        2000,
-        "La descripción no puede superar los 2000 caracteres"
-      ]
+
+    descripcion:{
+        type:String,
+        required:true
     },
 
-    categoria: {
-      type: String,
-      required: true,
-      enum: [
-        "Hardware",
-        "Software",
-        "Red",
-        "Accesos",
-        "Impresoras",
-        "Otro"
-      ],
-      default: "Otro"
+
+    categoria:{
+        type:String,
+        required:true,
+        enum:[
+            "Red",
+            "Hardware",
+            "Software"
+        ]
     },
 
-    prioridad: {
-      type: String,
-      required: true,
-      enum: [
-        "Baja",
-        "Media",
-        "Alta",
-        "Crítica"
-      ],
-      default: "Media"
+
+    prioridad:{
+        type:String,
+        required:true,
+        enum:[
+            "Alta",
+            "Media",
+            "Baja"
+        ]
     },
 
-    estado: {
-      type: String,
-      required: true,
-      enum: [
-        "Abierto",
-        "En proceso",
-        "Cerrado"
-      ],
-      default: "Abierto"
+
+    estado:{
+        type:String,
+        required:true,
+        enum:[
+            "Abierto",
+            "En Progreso",
+            "Cerrado"
+        ],
+        default:"Abierto"
+    },
+
+
+    fechaCreacion:{
+        type:Date,
+        default:Date.now
     }
-  },
-  {
-    timestamps: true,
-    versionKey: false
-  }
+
+
+},
+{
+    timestamps:true
+}
 );
 
-/*
-  Convierte automáticamente _id en id cuando
-  MongoDB envía la información al frontend.
-*/
-ticketSchema.set("toJSON", {
-  transform: function (documento, objetoRetornado) {
-    objetoRetornado.id =
-      objetoRetornado._id.toString();
 
-    delete objetoRetornado._id;
 
-    return objetoRetornado;
-  }
-});
-
-const Ticket = mongoose.model(
-  "Ticket",
-  ticketSchema
+module.exports = mongoose.model(
+    "Ticket",
+    ticketSchema
 );
-
-module.exports = Ticket;
