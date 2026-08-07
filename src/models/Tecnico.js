@@ -1,18 +1,40 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const mongoose = require("mongoose");
 
-const Tecnico = sequelize.define("Tecnico", {
 
-    especialidad:{
-        type:DataTypes.STRING,
-        allowNull:false
+const tecnicoSchema = new mongoose.Schema(
+{
+    nombre: {
+        type: String,
+        required: true
     },
 
-    disponibilidad:{
-        type:DataTypes.BOOLEAN,
-        defaultValue:true
+    especialidad: {
+        type: String,
+        required: true
+    },
+
+    disponibilidad: {
+        type: Boolean,
+        default: true
+    },
+
+    correo: {
+        type: String,
+        default: ""
+    },
+
+    telefono: {
+        type: String,
+        default: ""
     }
 
+},
+{
+    timestamps: true
 });
+
+
+const Tecnico = mongoose.model("Tecnico", tecnicoSchema);
+
 
 module.exports = Tecnico;

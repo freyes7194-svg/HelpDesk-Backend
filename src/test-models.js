@@ -1,21 +1,29 @@
-const sequelize = require("./config/database");
+const mongoose = require("./config/database");
 
 require("./models");
+
 
 async function probarModelos(){
 
     try{
 
-        await sequelize.sync();
+        await mongoose();
 
-        console.log("✅ Modelos sincronizados correctamente");
+        console.log("✅ Modelos cargados correctamente en MongoDB");
+
+
+        process.exit();
+
 
     }catch(error){
 
-        console.error(error);
+        console.error("❌ Error cargando modelos:", error.message);
+
+        process.exit(1);
 
     }
 
 }
+
 
 probarModelos();

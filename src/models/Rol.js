@@ -1,13 +1,31 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const mongoose = require("mongoose");
 
-const Rol = sequelize.define("Rol", {
 
-    nombre:{
-        type: DataTypes.STRING,
-        allowNull:false
+const rolSchema = new mongoose.Schema(
+{
+    nombre: {
+        type: String,
+        required: true,
+        unique: true
+    },
+
+    descripcion: {
+        type: String,
+        default: ""
+    },
+
+    activo: {
+        type: Boolean,
+        default: true
     }
 
+},
+{
+    timestamps: true
 });
+
+
+const Rol = mongoose.model("Rol", rolSchema);
+
 
 module.exports = Rol;

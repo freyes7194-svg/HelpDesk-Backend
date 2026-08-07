@@ -1,21 +1,49 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const mongoose = require("mongoose");
 
-const HistorialTicket = sequelize.define("HistorialTicket", {
 
-    estadoAnterior:{
-        type:DataTypes.STRING
+const historialTicketSchema = new mongoose.Schema(
+{
+    ticket: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Ticket",
+        required: true
     },
 
-    estadoNuevo:{
-        type:DataTypes.STRING
+    accion: {
+        type: String,
+        required: true
     },
 
-    fechaCambio:{
-        type:DataTypes.DATE,
-        defaultValue:DataTypes.NOW
+    descripcion: {
+        type: String,
+        default: ""
+    },
+
+    usuario: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Usuario"
+    },
+
+    estadoAnterior: {
+        type: String,
+        default: ""
+    },
+
+    estadoNuevo: {
+        type: String,
+        default: ""
     }
 
+},
+{
+    timestamps: true
 });
+
+
+const HistorialTicket = mongoose.model(
+    "HistorialTicket",
+    historialTicketSchema
+);
+
 
 module.exports = HistorialTicket;

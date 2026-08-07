@@ -1,19 +1,26 @@
-const sequelize = require("./config/database");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-async function probarConexion(){
+
+async function probarConexion() {
 
     try {
 
-        await sequelize.authenticate();
+        await mongoose.connect(process.env.MONGO_URI);
 
-        console.log("✅ Conexión a SQLite exitosa");
+        console.log("✅ Conexión a MongoDB Atlas exitosa");
 
-    } catch(error){
+        process.exit();
 
-        console.error("❌ Error de conexión:", error.message);
+    } catch(error) {
+
+        console.error("❌ Error de conexión MongoDB:", error.message);
+
+        process.exit(1);
 
     }
 
 }
+
 
 probarConexion();

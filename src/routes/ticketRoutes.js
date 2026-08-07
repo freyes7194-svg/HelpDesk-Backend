@@ -1,19 +1,51 @@
 const express = require("express");
 
+const {
+  obtenerTickets,
+  obtenerResumenTickets,
+  obtenerTicketPorId,
+  crearTicket,
+  actualizarTicket,
+  eliminarTicket
+} = require(
+  "../controllers/ticketController"
+);
+
 const router = express.Router();
 
-const ticketController = require("../controllers/ticketController");
+/*
+  La ruta /resumen debe estar antes de /:id.
+  De lo contrario Express podría interpretar
+  "resumen" como el ID de un ticket.
+*/
+router.get(
+  "/resumen",
+  obtenerResumenTickets
+);
 
+router.get(
+  "/",
+  obtenerTickets
+);
 
-router.get("/", ticketController.obtenerTickets);
+router.get(
+  "/:id",
+  obtenerTicketPorId
+);
 
-router.get("/:id", ticketController.obtenerTicketPorId);
+router.post(
+  "/",
+  crearTicket
+);
 
-router.post("/", ticketController.crearTicket);
+router.put(
+  "/:id",
+  actualizarTicket
+);
 
-router.put("/:id", ticketController.actualizarTicket);
-
-router.delete("/:id", ticketController.eliminarTicket);
-
+router.delete(
+  "/:id",
+  eliminarTicket
+);
 
 module.exports = router;

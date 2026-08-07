@@ -1,14 +1,26 @@
-const sequelize = require("./config/database");
+const conectarDB = require("./config/database");
 
-async function probarConexion() {
-    try {
-        await sequelize.authenticate();
 
-        console.log("✅ Conexión a SQLite exitosa");
+async function probarConexion(){
 
-    } catch (error) {
+    try{
+
+        await conectarDB();
+
+        console.log("✅ Conexión a MongoDB Atlas exitosa");
+
+        process.exit(0);
+
+
+    }catch(error){
+
         console.error("❌ Error de conexión:", error.message);
+
+        process.exit(1);
+
     }
+
 }
+
 
 probarConexion();
