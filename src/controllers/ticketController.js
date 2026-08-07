@@ -10,10 +10,9 @@ exports.obtenerTickets = async (req, res) => {
 
     try {
 
-
         const tickets = await Ticket.find()
             .sort({
-                fechaCreacion:-1
+                fechaCreacion: -1
             });
 
 
@@ -24,7 +23,6 @@ exports.obtenerTickets = async (req, res) => {
             tickets
 
         });
-
 
 
     } catch(error) {
@@ -45,39 +43,47 @@ exports.obtenerTickets = async (req, res) => {
 
 
 
-
 // =================================
-// OBTENER TICKET POR ID
-// GET /tickets/:id
+// OBTENER RESUMEN DASHBOARD
+// GET /tickets/resumen
 // =================================
 
-exports.obtenerTicketPorId = async(req,res)=>{
+exports.obtenerResumen = async(req,res)=>{
 
 
     try{
 
 
-        const ticket = await Ticket.findById(
-            req.params.id
-        );
+        const total = await Ticket.countDocuments();
 
 
-        if(!ticket){
+        const abiertos = await Ticket.countDocuments({
+            estado:"Abierto"
+        });
 
-            return res.status(404).json({
 
-                mensaje:"Ticket no encontrado"
+        const enProceso = await Ticket.countDocuments({
+            estado:"En Proceso"
+        });
 
-            });
 
-        }
+        const cerrados = await Ticket.countDocuments({
+            estado:"Cerrado"
+        });
+
 
 
         res.json({
 
             success:true,
 
-            ticket
+            total,
+
+            abiertos,
+
+            enProceso,
+
+            cerrados
 
         });
 
@@ -88,6 +94,8 @@ exports.obtenerTicketPorId = async(req,res)=>{
 
         res.status(500).json({
 
+            success:false,
+
             mensaje:error.message
 
         });
@@ -97,7 +105,6 @@ exports.obtenerTicketPorId = async(req,res)=>{
 
 
 };
-
 
 
 
@@ -159,42 +166,30 @@ exports.crearTicket = async(req,res)=>{
 
 
 
-
 // =================================
-// ACTUALIZAR TICKET
-// PUT /tickets/:id
+// OBTENER TICKET POR ID
 // =================================
 
-exports.actualizarTicket = async(req,res)=>{
+exports.obtenerTicketPorId = async(req,res)=>{
 
 
     try{
 
 
-        const ticketActualizado =
-        await Ticket.findByIdAndUpdate(
-
-            req.params.id,
-
-            req.body,
-
-            {
-                new:true
-            }
-
+        const ticket = await Ticket.findById(
+            req.params.id
         );
 
 
-
-        if(!ticketActualizado){
-
+        if(!ticket){
 
             return res.status(404).json({
+
+                success:false,
 
                 mensaje:"Ticket no encontrado"
 
             });
-
 
         }
 
@@ -204,9 +199,7 @@ exports.actualizarTicket = async(req,res)=>{
 
             success:true,
 
-            mensaje:"Ticket actualizado",
-
-            ticket:ticketActualizado
+            ticket
 
         });
 
@@ -216,6 +209,8 @@ exports.actualizarTicket = async(req,res)=>{
 
 
         res.status(500).json({
+
+            success:false,
 
             mensaje:error.message
 
@@ -229,10 +224,74 @@ exports.actualizarTicket = async(req,res)=>{
 
 
 
+// =================================
+// ACTUALIZAR TICKET
+// =================================
+
+exports.actualizarTicket = async(req,res)=>{
+
+
+    try{
+
+
+        const ticket = await Ticket.findByIdAndUpdate(
+
+            req.params.id,
+
+            req.body,
+
+            {
+                new:true
+            }
+
+        );
+
+
+        if(!ticket){
+
+            return res.status(404).json({
+
+                success:false,
+
+                mensaje:"Ticket no encontrado"
+
+            });
+
+        }
+
+
+
+        res.json({
+
+            success:true,
+
+            ticket
+
+        });
+
+
+
+    }catch(error){
+
+
+        res.status(500).json({
+
+            success:false,
+
+            mensaje:error.message
+
+        });
+
+
+    }
+
+
+};
+
+
 
 // =================================
 // ELIMINAR TICKET
-// DELETE /tickets/:id
 // =================================
 
 exports.eliminarTicket = async(req,res)=>{
@@ -241,22 +300,20 @@ exports.eliminarTicket = async(req,res)=>{
     try{
 
 
-        const ticket =
-        await Ticket.findByIdAndDelete(
+        const ticket = await Ticket.findByIdAndDelete(
             req.params.id
         );
 
 
-
         if(!ticket){
 
-
             return res.status(404).json({
+
+                success:false,
 
                 mensaje:"Ticket no encontrado"
 
             });
-
 
         }
 
@@ -277,80 +334,7 @@ exports.eliminarTicket = async(req,res)=>{
 
         res.status(500).json({
 
-            mensaje:error.message
-
-        });
-
-
-    }
-
-
-};
-
-
-
-
-// =================================
-// RESUMEN DASHBOARD
-// GET /tickets/resumen
-// =================================
-
-exports.obtenerResumen = async(req,res)=>{
-
-
-    try{
-
-
-        const total =
-        await Ticket.countDocuments();
-
-
-
-        const abiertos =
-        await Ticket.countDocuments({
-
-            estado:"Abierto"
-
-        });
-
-
-
-        const enProceso =
-        await Ticket.countDocuments({
-
-            estado:"En Progreso"
-
-        });
-
-
-
-        const cerrados =
-        await Ticket.countDocuments({
-
-            estado:"Cerrado"
-
-        });
-
-
-
-        res.json({
-
-            total,
-
-            abiertos,
-
-            enProceso,
-
-            cerrados
-
-        });
-
-
-
-    }catch(error){
-
-
-        res.status(500).json({
+            success:false,
 
             mensaje:error.message
 

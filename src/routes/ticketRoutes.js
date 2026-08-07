@@ -5,12 +5,22 @@ const router = express.Router();
 const ticketController = require("../controllers/ticketController");
 
 
+
+// ============================
+// RESUMEN DASHBOARD
 // IMPORTANTE PRIMERO
+// ============================
+
 router.get(
     "/resumen",
     ticketController.obtenerResumen
 );
 
+
+
+// ============================
+// LISTAR TICKETS
+// ============================
 
 router.get(
     "/",
@@ -18,11 +28,21 @@ router.get(
 );
 
 
+
+// ============================
+// CREAR TICKET
+// ============================
+
 router.post(
     "/",
     ticketController.crearTicket
 );
 
+
+
+// ============================
+// OBTENER POR ID
+// ============================
 
 router.get(
     "/:id",
@@ -30,16 +50,27 @@ router.get(
 );
 
 
+
+// ============================
+// ACTUALIZAR
+// ============================
+
 router.put(
     "/:id",
     ticketController.actualizarTicket
 );
 
 
+
+// ============================
+// ELIMINAR
+// ============================
+
 router.delete(
     "/:id",
     ticketController.eliminarTicket
 );
+
 
 
 module.exports = router;

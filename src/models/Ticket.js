@@ -3,49 +3,34 @@ const mongoose = require("mongoose");
 
 const ticketSchema = new mongoose.Schema(
 {
-
     titulo:{
         type:String,
-        required:true
+        required:true,
+        trim:true
     },
 
 
     descripcion:{
         type:String,
-        required:true
+        required:true,
+        trim:true
     },
 
 
     categoria:{
         type:String,
-        required:true,
-        enum:[
-            "Red",
-            "Hardware",
-            "Software"
-        ]
+        required:true
     },
 
 
     prioridad:{
         type:String,
-        required:true,
-        enum:[
-            "Alta",
-            "Media",
-            "Baja"
-        ]
+        required:true
     },
 
 
     estado:{
         type:String,
-        required:true,
-        enum:[
-            "Abierto",
-            "En Progreso",
-            "Cerrado"
-        ],
         default:"Abierto"
     },
 
@@ -58,10 +43,8 @@ const ticketSchema = new mongoose.Schema(
 
 },
 {
-    timestamps:true
-}
-);
-
+    collection:"tickets"
+});
 
 
 module.exports = mongoose.model(
