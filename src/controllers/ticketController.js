@@ -6,40 +6,51 @@ const Ticket = require("../models/Ticket");
 // GET /tickets
 // =================================
 
-exports.obtenerTickets = async (req, res) => {
+exports.obtenerTickets = async (req,res)=>{
 
-    try {
-
-        const tickets = await Ticket.find()
-            .sort({
-                fechaCreacion: -1
-            });
+try{
 
 
-        res.json({
+    const tickets = await Ticket.find({
 
-            success:true,
+        eliminado:false
 
-            tickets
+    })
+    .sort({
 
-        });
+        fechaCreacion:-1
 
-
-    } catch(error) {
-
-
-        res.status(500).json({
-
-            success:false,
-
-            mensaje:error.message
-
-        });
+    });
 
 
-    }
+
+    res.json({
+
+        success:true,
+
+        tickets
+
+    });
+
+
+
+}catch(error){
+
+
+    res.status(500).json({
+
+        success:false,
+
+        mensaje:error.message
+
+    });
+
+
+}
+
 
 };
+
 
 
 
@@ -50,59 +61,81 @@ exports.obtenerTickets = async (req, res) => {
 
 exports.obtenerResumen = async(req,res)=>{
 
-
-    try{
-
-
-        const total = await Ticket.countDocuments();
+try{
 
 
-        const abiertos = await Ticket.countDocuments({
-            estado:"Abierto"
-        });
-
-
-        const enProceso = await Ticket.countDocuments({
-            estado:"En Proceso"
-        });
-
-
-        const cerrados = await Ticket.countDocuments({
-            estado:"Cerrado"
-        });
+    const total = await Ticket.countDocuments({
+        eliminado:false
+    });
 
 
 
-        res.json({
-
-            success:true,
-
-            total,
-
-            abiertos,
-
-            enProceso,
-
-            cerrados
-
-        });
+    const abiertos = await Ticket.countDocuments({
+        estado:"Abierto",
+        eliminado:false
+    });
 
 
 
-    }catch(error){
+    const enProceso = await Ticket.countDocuments({
+        estado:"En Proceso",
+        eliminado:false
+    });
 
 
-        res.status(500).json({
 
-            success:false,
-
-            mensaje:error.message
-
-        });
+    const cerrados = await Ticket.countDocuments({
+        estado:"Cerrado",
+        eliminado:false
+    });
 
 
-    }
 
+    const editados = await Ticket.countDocuments({
+        editado:true
+    });
+
+
+
+    const eliminados = await Ticket.countDocuments({
+        eliminado:true
+    });
+
+
+
+    res.json({
+
+        success:true,
+
+        total,
+
+        abiertos,
+
+        enProceso,
+
+        cerrados,
+
+        editados,
+
+        eliminados
+
+    });
+
+
+
+}catch(error){
+
+
+    res.status(500).json({
+
+        success:false,
+
+        mensaje:error.message
+
+    });
+
+
+}
 
 };
 
@@ -115,54 +148,58 @@ exports.obtenerResumen = async(req,res)=>{
 
 exports.crearTicket = async(req,res)=>{
 
-
-    try{
-
-
-        const nuevoTicket = await Ticket.create({
-
-            titulo:req.body.titulo,
-
-            descripcion:req.body.descripcion,
-
-            categoria:req.body.categoria,
-
-            prioridad:req.body.prioridad,
-
-            estado:req.body.estado || "Abierto"
-
-        });
+try{
 
 
+    const nuevoTicket = await Ticket.create({
 
-        res.status(201).json({
+        titulo:req.body.titulo,
 
-            success:true,
+        descripcion:req.body.descripcion,
 
-            mensaje:"Ticket creado correctamente",
+        categoria:req.body.categoria,
 
-            ticket:nuevoTicket
+        prioridad:req.body.prioridad,
 
-        });
+        estado:req.body.estado || "Abierto",
+
+        editado:false,
+
+        eliminado:false
+
+    });
 
 
 
-    }catch(error){
+    res.status(201).json({
+
+        success:true,
+
+        mensaje:"Ticket creado correctamente",
+
+        ticket:nuevoTicket
+
+    });
 
 
-        res.status(500).json({
 
-            success:false,
-
-            mensaje:error.message
-
-        });
+}catch(error){
 
 
-    }
+    res.status(500).json({
+
+        success:false,
+
+        mensaje:error.message
+
+    });
+
+
+}
 
 
 };
+
 
 
 
@@ -172,55 +209,58 @@ exports.crearTicket = async(req,res)=>{
 
 exports.obtenerTicketPorId = async(req,res)=>{
 
-
-    try{
-
-
-        const ticket = await Ticket.findById(
-            req.params.id
-        );
+try{
 
 
-        if(!ticket){
+    const ticket = await Ticket.findById(
 
-            return res.status(404).json({
+        req.params.id
 
-                success:false,
-
-                mensaje:"Ticket no encontrado"
-
-            });
-
-        }
+    );
 
 
 
-        res.json({
+    if(!ticket){
 
-            success:true,
-
-            ticket
-
-        });
-
-
-
-    }catch(error){
-
-
-        res.status(500).json({
+        return res.status(404).json({
 
             success:false,
 
-            mensaje:error.message
+            mensaje:"Ticket no encontrado"
 
         });
-
 
     }
 
 
+
+    res.json({
+
+        success:true,
+
+        ticket
+
+    });
+
+
+
+}catch(error){
+
+
+    res.status(500).json({
+
+        success:false,
+
+        mensaje:error.message
+
+    });
+
+
+}
+
+
 };
+
 
 
 
@@ -230,55 +270,42 @@ exports.obtenerTicketPorId = async(req,res)=>{
 
 exports.actualizarTicket = async(req,res)=>{
 
-
-    try{
-
-
-        const ticket = await Ticket.findByIdAndUpdate(
-
-            req.params.id,
-
-            req.body,
-
-            {
-                new:true
-            }
-
-        );
+try{
 
 
-        if(!ticket){
+    const ticket = await Ticket.findByIdAndUpdate(
 
-            return res.status(404).json({
+        req.params.id,
 
-                success:false,
 
-                mensaje:"Ticket no encontrado"
+        {
 
-            });
+            ...req.body,
+
+            editado:true
+
+        },
+
+
+        {
+
+            new:true
 
         }
 
 
-
-        res.json({
-
-            success:true,
-
-            ticket
-
-        });
+    );
 
 
 
-    }catch(error){
+    if(!ticket){
 
 
-        res.status(500).json({
+        return res.status(404).json({
 
             success:false,
 
-            mensaje:error.message
+            mensaje:"Ticket no encontrado"
 
         });
 
@@ -286,7 +313,36 @@ exports.actualizarTicket = async(req,res)=>{
     }
 
 
+
+    res.json({
+
+        success:true,
+
+        mensaje:"Ticket actualizado correctamente",
+
+        ticket
+
+    });
+
+
+
+}catch(error){
+
+
+    res.status(500).json({
+
+        success:false,
+
+        mensaje:error.message
+
+    });
+
+
+}
+
+
 };
+
 
 
 
@@ -296,52 +352,71 @@ exports.actualizarTicket = async(req,res)=>{
 
 exports.eliminarTicket = async(req,res)=>{
 
-
-    try{
-
-
-        const ticket = await Ticket.findByIdAndDelete(
-            req.params.id
-        );
+try{
 
 
-        if(!ticket){
+    const ticket = await Ticket.findByIdAndUpdate(
 
-            return res.status(404).json({
+        req.params.id,
 
-                success:false,
 
-                mensaje:"Ticket no encontrado"
+        {
 
-            });
+            eliminado:true
+
+        },
+
+
+        {
+
+            new:true
 
         }
 
 
-
-        res.json({
-
-            success:true,
-
-            mensaje:"Ticket eliminado correctamente"
-
-        });
+    );
 
 
 
-    }catch(error){
+    if(!ticket){
 
 
-        res.status(500).json({
+        return res.status(404).json({
 
             success:false,
 
-            mensaje:error.message
+            mensaje:"Ticket no encontrado"
 
         });
 
 
     }
+
+
+
+    res.json({
+
+        success:true,
+
+        mensaje:"Ticket eliminado correctamente"
+
+    });
+
+
+
+}catch(error){
+
+
+    res.status(500).json({
+
+        success:false,
+
+        mensaje:error.message
+
+    });
+
+
+}
 
 
 };
