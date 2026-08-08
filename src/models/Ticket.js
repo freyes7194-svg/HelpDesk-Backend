@@ -1,103 +1,100 @@
 const mongoose = require("mongoose");
 
 
-const ticketSchema = new mongoose.Schema(
+const TicketSchema = new mongoose.Schema(
 
 {
-
-titulo:{
-
-type:String,
-
-required:true,
-
-trim:true
-
-},
+    titulo: {
+        type: String,
+        required: true,
+        trim: true
+    },
 
 
-
-descripcion:{
-
-type:String,
-
-required:true,
-
-trim:true
-
-},
+    descripcion: {
+        type: String,
+        required: true,
+        trim: true
+    },
 
 
+    categoria: {
 
-categoria:{
+        type: String,
 
-type:String,
+        enum: [
+            "Red",
+            "Hardware",
+            "Software"
+        ],
 
-required:true
+        required: true
 
-},
-
-
-
-prioridad:{
-
-type:String,
-
-required:true
-
-},
+    },
 
 
+    prioridad: {
 
-estado:{
+        type: String,
 
-type:String,
+        enum: [
+            "Alta",
+            "Media",
+            "Baja"
+        ],
 
-default:"Abierto"
+        default: "Media"
 
-},
-
-
-
-// Control de modificaciones
-
-editado:{
-
-type:Boolean,
-
-default:false
-
-},
+    },
 
 
+    estado: {
 
-// Control de eliminación lógica
+        type: String,
 
-eliminado:{
+        enum: [
+            "Abierto",
+            "En Proceso",
+            "Cerrado"
+        ],
 
-type:Boolean,
+        default: "Abierto"
 
-default:false
-
-},
+    },
 
 
+    usuario: {
 
-fechaCreacion:{
+        type: String,
 
-type:Date,
+        default: "Usuario final"
 
-default:Date.now
+    },
 
-}
 
+    tecnico: {
+
+        type: String,
+
+        default: null
+
+    },
+
+
+    fechaCreacion: {
+
+        type: Date,
+
+        default: Date.now
+
+    }
 
 },
 
 
 {
 
-collection:"tickets"
+    timestamps: true
 
 }
 
@@ -105,11 +102,7 @@ collection:"tickets"
 );
 
 
-
 module.exports = mongoose.model(
-
-"Ticket",
-
-ticketSchema
-
+    "Ticket",
+    TicketSchema
 );

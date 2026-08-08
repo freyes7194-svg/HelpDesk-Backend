@@ -1,34 +1,21 @@
 const mongoose = require("mongoose");
-
+require("dotenv").config();
 
 const conectarDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
 
-    try {
+    console.log("✅ MongoDB Atlas conectado correctamente");
 
-        await mongoose.connect(
-            process.env.MONGODB_URI
-        );
+  } catch (error) {
 
+    console.error(
+      "❌ Error al conectar MongoDB Atlas:",
+      error.message
+    );
 
-        console.log(
-            "MongoDB Atlas conectado correctamente"
-        );
-
-
-    } catch (error) {
-
-
-        console.error(
-            "Error al conectar MongoDB:",
-            error.message
-        );
-
-
-        process.exit(1);
-
-    }
-
+    process.exit(1);
+  }
 };
-
 
 module.exports = conectarDB;

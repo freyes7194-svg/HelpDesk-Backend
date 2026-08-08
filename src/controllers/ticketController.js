@@ -1,422 +1,364 @@
 const Ticket = require("../models/Ticket");
 
 
-// =================================
+// =====================================
 // OBTENER TODOS LOS TICKETS
 // GET /tickets
-// =================================
+// =====================================
 
-exports.obtenerTickets = async (req,res)=>{
+exports.obtenerTickets = async (req, res) => {
 
-try{
+    try {
 
-
-    const tickets = await Ticket.find({
-
-        eliminado:false
-
-    })
-    .sort({
-
-        fechaCreacion:-1
-
-    });
+        const tickets = await Ticket.find()
+            .sort({
+                createdAt: -1
+            });
 
 
-
-    res.json({
-
-        success:true,
-
-        tickets
-
-    });
+        res.status(200).json(tickets);
 
 
+    } catch (error) {
 
-}catch(error){
+        res.status(500).json({
 
+            mensaje: "Error al obtener tickets",
 
-    res.status(500).json({
+            error: error.message
 
-        success:false,
+        });
 
-        mensaje:error.message
-
-    });
-
-
-}
-
+    }
 
 };
 
 
 
+// =====================================
+// OBTENER TICKET POR ID
+// GET /tickets/:id
+// =====================================
 
-// =================================
-// OBTENER RESUMEN DASHBOARD
-// GET /tickets/resumen
-// =================================
+exports.obtenerTicketPorId = async (req, res) => {
 
-exports.obtenerResumen = async(req,res)=>{
+    try {
 
-try{
-
-
-    const total = await Ticket.countDocuments({
-        eliminado:false
-    });
+        const ticket = await Ticket.findById(
+            req.params.id
+        );
 
 
+        if (!ticket) {
 
-    const abiertos = await Ticket.countDocuments({
-        estado:"Abierto",
-        eliminado:false
-    });
+            return res.status(404).json({
 
+                mensaje: "Ticket no encontrado"
 
+            });
 
-    const enProceso = await Ticket.countDocuments({
-        estado:"En Proceso",
-        eliminado:false
-    });
+        }
 
 
-
-    const cerrados = await Ticket.countDocuments({
-        estado:"Cerrado",
-        eliminado:false
-    });
+        res.status(200).json(ticket);
 
 
+    } catch (error) {
 
-    const editados = await Ticket.countDocuments({
-        editado:true
-    });
+        res.status(500).json({
 
+            mensaje: "Error al buscar ticket",
 
+            error: error.message
 
-    const eliminados = await Ticket.countDocuments({
-        eliminado:true
-    });
+        });
 
-
-
-    res.json({
-
-        success:true,
-
-        total,
-
-        abiertos,
-
-        enProceso,
-
-        cerrados,
-
-        editados,
-
-        eliminados
-
-    });
-
-
-
-}catch(error){
-
-
-    res.status(500).json({
-
-        success:false,
-
-        mensaje:error.message
-
-    });
-
-
-}
+    }
 
 };
 
 
 
-// =================================
+// =====================================
 // CREAR TICKET
 // POST /tickets
-// =================================
+// =====================================
 
-exports.crearTicket = async(req,res)=>{
+exports.crearTicket = async (req, res) => {
 
-try{
-
-
-    const nuevoTicket = await Ticket.create({
-
-        titulo:req.body.titulo,
-
-        descripcion:req.body.descripcion,
-
-        categoria:req.body.categoria,
-
-        prioridad:req.body.prioridad,
-
-        estado:req.body.estado || "Abierto",
-
-        editado:false,
-
-        eliminado:false
-
-    });
+    try {
 
 
+        const nuevoTicket = new Ticket({
 
-    res.status(201).json({
+            titulo: req.body.titulo,
 
-        success:true,
+            descripcion: req.body.descripcion,
 
-        mensaje:"Ticket creado correctamente",
+            categoria: req.body.categoria,
 
-        ticket:nuevoTicket
+            prioridad: req.body.prioridad,
 
-    });
+            estado:
+                req.body.estado || "Abierto",
 
-
-
-}catch(error){
-
-
-    res.status(500).json({
-
-        success:false,
-
-        mensaje:error.message
-
-    });
-
-
-}
-
-
-};
-
-
-
-
-// =================================
-// OBTENER TICKET POR ID
-// =================================
-
-exports.obtenerTicketPorId = async(req,res)=>{
-
-try{
-
-
-    const ticket = await Ticket.findById(
-
-        req.params.id
-
-    );
-
-
-
-    if(!ticket){
-
-        return res.status(404).json({
-
-            success:false,
-
-            mensaje:"Ticket no encontrado"
+            usuario:
+                req.body.usuario || "Usuario final"
 
         });
 
+
+
+        const ticketGuardado =
+            await nuevoTicket.save();
+
+
+
+        res.status(201).json({
+
+            mensaje:
+                "Ticket creado correctamente",
+
+            ticket:
+                ticketGuardado
+
+        });
+
+
+
+    } catch (error) {
+
+
+        res.status(400).json({
+
+            mensaje:
+                "Error al crear ticket",
+
+            error:
+                error.message
+
+        });
+
+
     }
-
-
-
-    res.json({
-
-        success:true,
-
-        ticket
-
-    });
-
-
-
-}catch(error){
-
-
-    res.status(500).json({
-
-        success:false,
-
-        mensaje:error.message
-
-    });
-
-
-}
-
 
 };
 
 
 
-
-// =================================
+// =====================================
 // ACTUALIZAR TICKET
-// =================================
+// PUT /tickets/:id
+// =====================================
 
-exports.actualizarTicket = async(req,res)=>{
+exports.actualizarTicket = async (req, res) => {
 
-try{
-
-
-    const ticket = await Ticket.findByIdAndUpdate(
-
-        req.params.id,
+    try {
 
 
-        {
+        const ticketActualizado =
+            await Ticket.findByIdAndUpdate(
 
-            ...req.body,
+                req.params.id,
 
-            editado:true
+                req.body,
 
-        },
+                {
+                    new: true,
+                    runValidators: true
+                }
+
+            );
 
 
-        {
 
-            new:true
+        if (!ticketActualizado) {
+
+            return res.status(404).json({
+
+                mensaje:
+                    "Ticket no encontrado"
+
+            });
 
         }
 
 
-    );
+
+        res.status(200).json({
+
+            mensaje:
+                "Ticket actualizado correctamente",
+
+            ticket:
+                ticketActualizado
+
+        });
 
 
 
-    if(!ticket){
+    } catch (error) {
 
 
-        return res.status(404).json({
+        res.status(400).json({
 
-            success:false,
+            mensaje:
+                "Error al actualizar ticket",
 
-            mensaje:"Ticket no encontrado"
+            error:
+                error.message
 
         });
 
 
     }
-
-
-
-    res.json({
-
-        success:true,
-
-        mensaje:"Ticket actualizado correctamente",
-
-        ticket
-
-    });
-
-
-
-}catch(error){
-
-
-    res.status(500).json({
-
-        success:false,
-
-        mensaje:error.message
-
-    });
-
-
-}
-
 
 };
 
 
 
-
-// =================================
+// =====================================
 // ELIMINAR TICKET
-// =================================
+// DELETE /tickets/:id
+// =====================================
 
-exports.eliminarTicket = async(req,res)=>{
+exports.eliminarTicket = async (req, res) => {
 
-try{
-
-
-    const ticket = await Ticket.findByIdAndUpdate(
-
-        req.params.id,
+    try {
 
 
-        {
+        const ticketEliminado =
+            await Ticket.findByIdAndDelete(
+                req.params.id
+            );
 
-            eliminado:true
-
-        },
 
 
-        {
+        if (!ticketEliminado) {
 
-            new:true
+
+            return res.status(404).json({
+
+                mensaje:
+                    "Ticket no encontrado"
+
+            });
+
 
         }
 
 
-    );
+
+        res.status(200).json({
+
+            mensaje:
+                "Ticket eliminado correctamente"
+
+        });
 
 
 
-    if(!ticket){
+    } catch (error) {
 
 
-        return res.status(404).json({
+        res.status(500).json({
 
-            success:false,
+            mensaje:
+                "Error al eliminar ticket",
 
-            mensaje:"Ticket no encontrado"
+            error:
+                error.message
 
         });
 
 
     }
 
-
-
-    res.json({
-
-        success:true,
-
-        mensaje:"Ticket eliminado correctamente"
-
-    });
+};
 
 
 
-}catch(error){
+// =====================================
+// RESUMEN PARA DASHBOARD
+// GET /tickets/resumen
+// =====================================
+
+exports.obtenerResumen = async (req, res) => {
+
+    try {
 
 
-    res.status(500).json({
-
-        success:false,
-
-        mensaje:error.message
-
-    });
+        const total =
+            await Ticket.countDocuments();
 
 
-}
 
+        const abiertos =
+            await Ticket.countDocuments({
+
+                estado: "Abierto"
+
+            });
+
+
+
+        const proceso =
+            await Ticket.countDocuments({
+
+                estado: "En Proceso"
+
+            });
+
+
+
+        const cerrados =
+            await Ticket.countDocuments({
+
+                estado: "Cerrado"
+
+            });
+
+
+
+        const prioridadAlta =
+            await Ticket.countDocuments({
+
+                prioridad: "Alta"
+
+            });
+
+
+
+        res.status(200).json({
+
+            total,
+
+            abiertos,
+
+            enProceso: proceso,
+
+            cerrados,
+
+            prioridadAlta
+
+        });
+
+
+
+    } catch (error) {
+
+
+        res.status(500).json({
+
+            mensaje:
+                "Error al generar resumen",
+
+            error:
+                error.message
+
+        });
+
+
+    }
 
 };

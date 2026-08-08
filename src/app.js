@@ -1,84 +1,103 @@
 const express = require("express");
 const cors = require("cors");
-
 require("dotenv").config();
 
-const conectarDB = require("./config/database");
-
 const ticketRoutes = require("./routes/ticketRoutes");
-
-
-// Crear aplicación Express
 
 const app = express();
 
 
-// Conectar MongoDB Atlas
+// ===============================
+// CONFIGURACIÓN CORS
+// ===============================
 
-conectarDB();
+const opcionesCors = {
+  origin: function (origin, callback) {
 
+    const origenesPermitidos = [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "https://helpdesk-frontend.onrender.com"
+    ];
+
+
+    // Permite Postman, aplicaciones móviles y pruebas sin origen
+    if (!origin) {
+      return callback(null, true);
+    }
+
+
+    if (origenesPermitidos.includes(origin)) {
+      return callback(null, true);
+    }
+
+
+    return callback(null, true);
+  },
+
+  methods: [
+    "GET",
+    "POST",
+    "PUT",
+    "DELETE"
+  ],
+
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization"
+  ]
+};
+
+
+app.use(cors(opcionesCors));
 
 
 // ===============================
-// CORS
+// MIDDLEWARE JSON
 // ===============================
 
-app.use(
-    cors({
-        origin:[
-            "https://helpdesk-frontend-react.onrender.com",
-            "http://localhost:5173"
-        ],
-
-        methods:[
-            "GET",
-            "POST",
-            "PUT",
-            "DELETE"
-        ],
-
-        credentials:true
-    })
-);
-
+app.use(express.json());
 
 
 // ===============================
-// JSON
+// RUTA PRINCIPAL
 // ===============================
 
-app.use(
-    express.json()
-);
+app.get("/", (req, res) => {
 
-
-
-// ===============================
-// RUTA PRUEBA
-// ===============================
-
-app.get("/",(req,res)=>{
-
-    res.json({
-
-        mensaje:
-        "API Help Desk funcionando correctamente"
-
-    });
+  res.json({
+    mensaje:
+      "API Sistema de Gestión de Incidentes Help Desk funcionando correctamente",
+    puerto:
+      process.env.PORT || 5055
+  });
 
 });
 
 
+// ===============================
+// RUTAS DEL SISTEMA
+// ===============================
+
+app.use("/tickets", ticketRoutes);
+
 
 // ===============================
-// RUTAS TICKETS
+// MANEJO DE ERROR 404
 // ===============================
 
-app.use(
-    "/tickets",
-    ticketRoutes
-);
+app.use((req, res) => {
 
+  res.status(404).json({
+
+    error: "Ruta no encontrada",
+
+    ruta:
+      req.originalUrl
+
+  });
+
+});
 
 
 module.exports = app;
