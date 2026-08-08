@@ -1,0 +1,863 @@
+/* =====================================
+   CONFIGURACION GENERAL
+===================================== */
+
+*{
+    box-sizing:border-box;
+}
+
+
+body{
+
+    margin:0;
+
+    font-family:
+    Arial, Helvetica, sans-serif;
+
+    background:#eef3f8;
+
+    color:#10243e;
+
+}
+
+
+.app{
+
+    min-height:100vh;
+
+}
+
+
+
+/* =====================================
+   NAVBAR
+===================================== */
+
+
+.navbar{
+
+    background:#061d33;
+
+    height:95px;
+
+    padding:0 55px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    color:white;
+
+}
+
+
+
+.marca{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+
+
+.logo-hd{
+
+    width:55px;
+
+    height:55px;
+
+    background:#48b8e8;
+
+    color:#06213a;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:12px;
+
+    font-weight:bold;
+
+    font-size:22px;
+
+}
+
+
+
+.texto-logo h2{
+
+    margin:0;
+
+    color:white;
+
+    letter-spacing:2px;
+
+}
+
+
+
+.texto-logo span{
+
+    color:#b5c8da;
+
+}
+
+
+
+.menu{
+
+    display:flex;
+
+    gap:18px;
+
+}
+
+
+
+.menu button{
+
+    background:transparent;
+
+    color:white;
+
+    border:none;
+
+    padding:14px 22px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+}
+
+
+
+.menu button:hover{
+
+    background:#173d60;
+
+}
+
+
+
+.menu .nuevo{
+
+    background:#0878c9;
+
+}
+
+
+
+.contador{
+
+    background:#45b5e8;
+
+    color:#06213a;
+
+    padding:4px 8px;
+
+    border-radius:20px;
+
+}
+
+
+
+
+
+/* =====================================
+   DASHBOARD
+===================================== */
+
+
+.dashboard{
+
+    padding:40px;
+
+    min-height:100vh;
+
+    background:#eef3f8;
+
+}
+
+
+
+.encabezado-dashboard{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:45px;
+
+}
+
+
+
+.subtitulo{
+
+    color:#1261a0;
+
+    font-size:14px;
+
+    letter-spacing:3px;
+
+    font-weight:bold;
+
+}
+
+
+
+.encabezado-dashboard h1{
+
+    font-size:52px;
+
+    margin:10px 0;
+
+    color:#10243e;
+
+}
+
+
+
+.encabezado-dashboard p{
+
+    color:#667085;
+
+    font-size:18px;
+
+}
+
+
+
+.boton-admin{
+
+    background:#061d33;
+
+    color:white;
+
+    border:none;
+
+    padding:18px 30px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+
+}
+
+
+
+
+
+/* TARJETAS */
+
+
+.grid-tarjetas{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:25px;
+
+}
+
+
+
+.tarjeta{
+
+    position:relative;
+
+    overflow:hidden;
+
+    height:280px;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    color:white;
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,.15);
+
+}
+
+
+
+.tarjeta::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:190px;
+
+    height:190px;
+
+    right:-50px;
+
+    bottom:-50px;
+
+    border-radius:50%;
+
+    background:
+    rgba(255,255,255,.12);
+
+}
+
+
+
+.tarjeta-arriba{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+
+
+.icono{
+
+    padding:12px;
+
+    background:
+    rgba(255,255,255,.18);
+
+    border-radius:10px;
+
+    font-weight:bold;
+
+}
+
+
+
+.actual{
+
+    font-size:12px;
+
+    letter-spacing:2px;
+
+    font-weight:bold;
+
+}
+
+
+
+.tarjeta h2{
+
+    position:relative;
+
+    z-index:2;
+
+    color:white;
+
+    font-size:58px;
+
+    margin:35px 0 15px;
+
+}
+
+
+
+.tarjeta h3{
+
+    position:relative;
+
+    z-index:2;
+
+    color:white;
+
+    font-size:21px;
+
+    margin:0 0 12px;
+
+}
+
+
+
+.tarjeta p{
+
+    position:relative;
+
+    z-index:2;
+
+    color:white;
+
+}
+
+
+
+
+
+/* COLORES */
+
+
+.tarjeta-marino{
+
+    background:#092d4d;
+
+}
+
+
+.tarjeta-azul{
+
+    background:#1468a8;
+
+}
+
+
+.tarjeta-turquesa{
+
+    background:#117b88;
+
+}
+
+
+.tarjeta-verde{
+
+    background:#167456;
+
+}
+
+
+.tarjeta-naranja{
+
+    background:#b56a08;
+
+}
+
+
+.tarjeta-roja{
+
+    background:#a52b3c;
+
+}
+
+
+
+
+
+/* =====================================
+   LISTA TICKETS
+===================================== */
+
+
+.lista-tickets{
+
+    padding:40px;
+
+    min-height:100vh;
+
+}
+
+
+
+.contenedor-tickets{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:25px;
+
+}
+
+
+
+.ticket-card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.10);
+
+}
+
+
+
+.ticket-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+
+
+.estado{
+
+    padding:7px 14px;
+
+    border-radius:20px;
+
+    font-weight:bold;
+
+}
+
+
+
+.Abierto{
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+}
+
+
+.En-Proceso{
+
+    background:#cffafe;
+
+    color:#0e7490;
+
+}
+
+
+.Cerrado{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+}
+
+
+
+
+
+/* =====================================
+   FORMULARIO
+===================================== */
+
+
+.formulario-contenedor{
+
+    padding:40px;
+
+}
+
+
+
+.formulario-ticket{
+
+    background:white;
+
+    max-width:850px;
+
+    padding:35px;
+
+    border-radius:20px;
+
+}
+
+
+
+.formulario-ticket input,
+.formulario-ticket textarea,
+.formulario-ticket select{
+
+    width:100%;
+
+    padding:14px;
+
+    border-radius:10px;
+
+    border:1px solid #d0d5dd;
+
+}
+
+
+
+.fila-formulario{
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:20px;
+
+}
+
+
+
+
+
+/* =====================================
+   BOTONES
+===================================== */
+
+
+.boton-editar{
+
+    background:#1468a8;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+}
+
+
+
+.boton-eliminar{
+
+    background:#a52b3c;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+}
+
+
+
+.guardar{
+
+    background:#0878c9;
+
+    color:white;
+
+    padding:15px 30px;
+
+    border:none;
+
+    border-radius:10px;
+
+}
+
+
+
+.cancelar{
+
+    background:#64748b;
+
+    color:white;
+
+    padding:15px 30px;
+
+    border:none;
+
+    border-radius:10px;
+
+}
+
+
+
+
+
+/* =====================================
+   CELULAR
+===================================== */
+
+
+@media(max-width:900px){
+
+
+    .navbar{
+
+        height:auto;
+
+        padding:20px;
+
+        flex-direction:column;
+
+        gap:20px;
+
+    }
+
+
+    .menu{
+
+        flex-direction:column;
+
+        width:100%;
+
+    }
+
+
+    .menu button{
+
+        width:100%;
+
+    }
+
+
+    .grid-tarjetas{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .contenedor-tickets{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .encabezado-dashboard{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+
+    .fila-formulario{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+}
+/* ============================
+   BOTONES TARJETAS TICKETS
+============================ */
+
+
+.acciones{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:20px;
+
+}
+
+
+.lista-tickets h1{
+
+    font-size:42px;
+
+    color:#10243e;
+
+}
+
+
+.datos-ticket{
+
+    margin-top:20px;
+
+    color:#667085;
+
+}
+
+
+.datos-ticket b{
+
+    color:#10243e;
+
+    margin-left:5px;
+
+}
+/* =====================================
+   FORMULARIO FINAL HELP DESK
+===================================== */
+
+
+.cabecera-formulario span{
+
+    color:#1261a0;
+
+    font-weight:bold;
+
+    letter-spacing:3px;
+
+}
+
+
+
+.cabecera-formulario h1{
+
+    color:#10243e;
+
+    font-size:42px;
+
+    margin:10px 0;
+
+}
+
+
+
+.cabecera-formulario p{
+
+    color:#667085;
+
+    font-size:17px;
+
+}
+
+
+
+.acciones-formulario{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:30px;
+
+}
+
+
+
+.guardar,
+.cancelar{
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+}
+
+
+
+.guardar:hover,
+.cancelar:hover{
+
+    opacity:.85;
+
+}

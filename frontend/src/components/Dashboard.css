@@ -1,0 +1,300 @@
+/* ===============================
+   DASHBOARD
+================================ */
+
+
+.dashboard {
+
+    padding:40px;
+
+    background:#eef3f8;
+
+    min-height:100vh;
+
+}
+
+
+
+/* ENCABEZADO */
+
+
+.encabezado-dashboard {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:40px;
+
+}
+
+
+
+.subtitulo {
+
+    color:#1769aa;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    letter-spacing:3px;
+
+}
+
+
+
+.encabezado-dashboard h1 {
+
+    color:#10243e;
+
+    font-size:48px;
+
+    margin:10px 0;
+
+}
+
+
+
+.encabezado-dashboard p {
+
+    color:#64748b;
+
+    font-size:18px;
+
+}
+
+
+
+
+.boton-admin {
+
+    background:#071f35;
+
+    color:white;
+
+    border:none;
+
+    padding:18px 28px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+
+}
+
+
+
+
+/* GRID */
+
+.grid-tarjetas {
+
+
+    display:grid;
+
+
+    grid-template-columns:
+
+    repeat(3,1fr);
+
+
+    gap:25px;
+
+
+}
+
+
+
+
+/* TARJETAS */
+
+
+.tarjeta {
+
+
+    height:230px;
+
+
+    padding:30px;
+
+
+    border-radius:20px;
+
+
+    color:white;
+
+
+    box-shadow:
+
+    0 15px 30px rgba(0,0,0,.15);
+
+
+}
+
+
+
+
+.tarjeta-arriba {
+
+
+    display:flex;
+
+
+    justify-content:space-between;
+
+
+}
+
+
+
+
+.icono {
+
+
+    padding:10px;
+
+
+    border-radius:10px;
+
+
+    background:rgba(255,255,255,.15);
+
+
+    font-weight:bold;
+
+
+}
+
+
+
+.actual {
+
+
+    font-size:12px;
+
+
+    letter-spacing:2px;
+
+
+}
+
+
+
+
+.tarjeta h2 {
+
+
+    font-size:60px;
+
+
+    margin:30px 0 10px;
+
+
+}
+
+
+
+.tarjeta h3 {
+
+
+    font-size:22px;
+
+
+    margin:0;
+
+
+}
+
+
+
+.tarjeta p {
+
+
+    margin-top:10px;
+
+
+}
+
+
+
+
+/* COLORES */
+
+
+.tarjeta-marino {
+
+background:#092d4d;
+
+}
+
+
+.tarjeta-azul {
+
+background:#1468a8;
+
+}
+
+
+.tarjeta-turquesa {
+
+background:#117b88;
+
+}
+
+
+.tarjeta-verde {
+
+background:#167456;
+
+}
+
+
+.tarjeta-naranja {
+
+background:#b56a08;
+
+}
+
+
+.tarjeta-roja {
+
+background:#a52b3c;
+
+}
+
+
+
+
+
+/* CELULAR */
+
+
+@media(max-width:900px){
+
+
+.grid-tarjetas{
+
+
+grid-template-columns:1fr;
+
+
+}
+
+
+
+.encabezado-dashboard{
+
+
+flex-direction:column;
+
+align-items:flex-start;
+
+
+}
+
+
+
+}
